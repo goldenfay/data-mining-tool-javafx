@@ -1,6 +1,9 @@
 # Data Mining Package 
 ![introduction](./assets/images/intro.gif)
+
+
 ## Overview
+
 ![overview info](./assets/images/main_window.png)
 
 A Java tool for applying Data Mining algorithms, implemented in JavaFx.
@@ -32,19 +35,31 @@ The project is basically devided into two main parts:
 ## Features
 
  ### Upload a .arrf dataset file
+
+
  ![upload info](./assets/images/choose_dataset.png)
  
  ### Dataset Visualization
+
+
  ![visualization1 info](./assets/images/visualization_1.png)
  ![visualization2 info](./assets/images/visualization_2.png)
  ![visualization3 info](./assets/images/visualization_3.png)
  ![visualization4 info](./assets/images/visualization_4.png)
 
  ### Dataset Preprocessing
+
+
  ![preprocess info](./assets/images/preprocessing.png)
  ### Frequent patterns extraction
+
+
  ![image](./assets/images/apriori.png)
+
+ 
  ### Clustering
+
+
  ![image](./assets/images/clustering.png)
 
 ## Credit
