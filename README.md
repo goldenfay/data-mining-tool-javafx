@@ -1,11 +1,11 @@
 # Data Mining Package 
 <!-- ![introduction](assets/images/intro.gif) -->
-<img width="300px" height="200px" align="center"  src="./assets/images/intro.gif" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/intro.gif" /></div>
 
 ## Overview
 
 <!-- ![overview info](assets/images/main_window.PNG?raw=true) -->
-<img width="300px" height="200px" align="center"  src="./assets/images/main_window.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/main_window.PNG?raw=true" /></div>
 A Java tool for applying Data Mining algorithms, implemented in JavaFx.
 
 
@@ -39,7 +39,7 @@ The project is basically devided into two main parts:
 
  <!-- ![upload info](assets/images/choose_dataset.PNG?raw=true) -->
  
-<img width="300px" height="200px" align="center"  src="./assets/images/choose_dataset.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/choose_dataset.PNG?raw=true" /></div>
 
  ### Dataset Visualization
 
@@ -49,30 +49,30 @@ The project is basically devided into two main parts:
  <!-- ![visualization3 info](assets/images/visualization_3.PNG?raw=true) -->
  <!-- ![visualization4 info](assets/images/visualization_4.PNG?raw=true) -->
 
-<img width="300px" height="200px" align="center"  src="./assets/images/visualization_1.PNG?raw=true" />
-<img width="300px" height="200px" align="center"  src="./assets/images/visualization_2.PNG?raw=true" />
-<img width="300px" height="200px" align="center"  src="./assets/images/visualization_3.PNG?raw=true" />
-<img width="300px" height="200px" align="center"  src="./assets/images/visualization_4.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/visualization_1.PNG?raw=true" /></div>
+<div align="center"><img width="300px" height="200px" src="./assets/images/visualization_2.PNG?raw=true" /></div>
+<div align="center"><img width="300px" height="200px" src="./assets/images/visualization_3.PNG?raw=true" /></div>
+<div align="center"><img width="300px" height="200px" src="./assets/images/visualization_4.PNG?raw=true" /></div>
 
 
  ### Dataset Preprocessing
 
 
  <!-- ![preprocess info](assets/images/preprocessing.PNG?raw=true) -->
-<img width="300px" height="200px" align="center"  src="./assets/images/preprocessing.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/preprocessing.PNG?raw=true" /></div>
 
  ### Frequent patterns extraction
 
 
  <!-- ![image](assets/images/apriori.PNG?raw=true) -->
-<img width="300px" height="200px" align="center"  src="./assets/images/apriori.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/apriori.PNG?raw=true" /></div>
 
  
  ### Clustering
 
 
  <!-- ![image](assets/images/clustering.PNG?raw=true) -->
-<img width="300px" height="200px" align="center"  src="./assets/images/clustering.PNG?raw=true" />
+<div align="center"><img width="300px" height="200px" src="./assets/images/clustering.PNG?raw=true" /></div>
 
 ## Credit
 
