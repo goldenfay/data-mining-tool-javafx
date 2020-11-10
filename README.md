@@ -4,8 +4,8 @@
 
 ## Overview
 
-<!-- ![overview info](assets/images/main_window.png?raw=true) -->
-<img  src="./assets/images/main_window.png?raw=true" />
+<!-- ![overview info](assets/images/main_window.PNG?raw=true) -->
+<img  src="./assets/images/main_window.PNG?raw=true" />
 A Java tool for applying Data Mining algorithms, implemented in JavaFx.
 
 
@@ -37,42 +37,42 @@ The project is basically devided into two main parts:
  ### Upload a .arrf dataset file
 
 
- <!-- ![upload info](assets/images/choose_dataset.png?raw=true) -->
+ <!-- ![upload info](assets/images/choose_dataset.PNG?raw=true) -->
  
-<img  src="./assets/images/choose_dataset.png?raw=true" />
+<img  src="./assets/images/choose_dataset.PNG?raw=true" />
 
  ### Dataset Visualization
 
 
- <!-- ![visualization1 info](assets/images/visualization_1.png?raw=true) -->
- <!-- ![visualization2 info](assets/images/visualization_2.png?raw=true) -->
- <!-- ![visualization3 info](assets/images/visualization_3.png?raw=true) -->
- <!-- ![visualization4 info](assets/images/visualization_4.png?raw=true) -->
+ <!-- ![visualization1 info](assets/images/visualization_1.PNG?raw=true) -->
+ <!-- ![visualization2 info](assets/images/visualization_2.PNG?raw=true) -->
+ <!-- ![visualization3 info](assets/images/visualization_3.PNG?raw=true) -->
+ <!-- ![visualization4 info](assets/images/visualization_4.PNG?raw=true) -->
 
-<img  src="./assets/images/visualization_1.png?raw=true" />
-<img  src="./assets/images/visualization_2.png?raw=true" />
-<img  src="./assets/images/visualization_3.png?raw=true" />
-<img  src="./assets/images/visualization_4.png?raw=true" />
+<img  src="./assets/images/visualization_1.PNG?raw=true" />
+<img  src="./assets/images/visualization_2.PNG?raw=true" />
+<img  src="./assets/images/visualization_3.PNG?raw=true" />
+<img  src="./assets/images/visualization_4.PNG?raw=true" />
 
 
  ### Dataset Preprocessing
 
 
- <!-- ![preprocess info](assets/images/preprocessing.png?raw=true) -->
-<img  src="./assets/images/preprocessing.png?raw=true" />
+ <!-- ![preprocess info](assets/images/preprocessing.PNG?raw=true) -->
+<img  src="./assets/images/preprocessing.PNG?raw=true" />
 
  ### Frequent patterns extraction
 
 
- <!-- ![image](assets/images/apriori.png?raw=true) -->
-<img  src="./assets/images/apriori.png?raw=true" />
+ <!-- ![image](assets/images/apriori.PNG?raw=true) -->
+<img  src="./assets/images/apriori.PNG?raw=true" />
 
  
  ### Clustering
 
 
- <!-- ![image](assets/images/clustering.png?raw=true) -->
-<img  src="./assets/images/clustering.png?raw=true" />
+ <!-- ![image](assets/images/clustering.PNG?raw=true) -->
+<img  src="./assets/images/clustering.PNG?raw=true" />
 
 ## Credit
 
