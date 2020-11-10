@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+.mainFxmlClass {
+
+    -fx-background-color: #ffffff;
+}
+
+.settings_btn:hover{
+    -fx-fill: #356fe4;
+}
+
+.chooseFile_btn{
+    -fx-background-color: #0b46a3;
+    -fx-border-radius: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.chooseFile_btn:hover{
+    -fx-background-color: #4287f5;
+    
+}
+
+.loadDS_btn{
+    -fx-background-color: #07a614;
+    -fx-border-radius-width: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.loadDS_btn:hover{
+    -fx-background-color: #42ed50;
+    
+}
+.filepath_input{
+    -fx-border-width:  0px 0px 2px 0px;
+    -fx-border-color: #3a51b7;
+    -fx-background-color:  transparent;
+}
+

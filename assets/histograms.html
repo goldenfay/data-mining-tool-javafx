@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="bootstrap-4.3.1-dist/js/jquery.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="Chart.js-2.9.2/dist/Chart.js"></script>
+    <style>
+    tr {
+       cursor: default;
+      }
+    .highlight {
+      background: yellow;
+     }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div>
+            <div class="row" >
+              <table id="dataset_table" border="1" class="table">
+                <tbody>
+                </tbody>
+            </table>
+            </div>
+            <div class="row" width="600" height="800" border="1" >
+              <canvas width="400" height="400" id="myChart"></canvas>
+            </div>
+            <div class="row"  width="600" height="800" border="1" >
+              <canvas id="histogram" width="400" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+    var glbl=true;
+    $(function()
+    {
+      var rows = $('td');
+      rows.on('click', function(e)
+       {
+         /*********REPLACE CANVAS BY A NEW ONE TO BE ABLE TO REDRAW SCATTER***************/
+          var aEl = document.getElementById("myChart");
+          var newEl = document.createElement('canvas');
+          newEl.height = "400";
+          newEl.id="myChart";
+          aEl.parentNode.replaceChild(newEl, aEl);
+          aEl = document.getElementById("histogram");
+          newEl = document.createElement('canvas');
+          newEl.height = "400";
+          newEl.id="histogram";
+          aEl.parentNode.replaceChild(newEl, aEl);
+          /********************************************************/
+          var row = $(this);
+          var selectedAttribute=row;
+          rows.removeClass('highlight');
+          row.addClass('highlight');
+
+      /*****************************************************FILL SCATTER PLOT WITH DATA*************************************************************/
+          var ctx = document.getElementById("myChart").getContext('2d');
+          var selectedAttributeValues = []
+          var j =1;
+          var data = [];
+          var obj = {};
+        for(var i=0;i<attributes.length;i++)
+        {
+          if((attributes[i].localeCompare(row.text()))==0)
+          {
+            for(variable in dataset['Relation'])
+            {
+              data.push({x:j,y:dataset['Relation'][variable][attributes[i]]});
+              selectedAttributeValues.push(dataset['Relation'][variable][attributes[i]]);
+              j = j +1 ;
+            }
+          }
+        }
+
+          var options = {responsive: true,
+              maintainAspectRatio: false,
+          };
+
+          // End Defining data
+           var myChart = new Chart(ctx, {
+              type: 'scatter',
+              data: {
+                  datasets: [{
+                          label: 'Data dispersion('+row.text()+')',
+                          data: data,
+                    borderColor: '#2196f3',
+                    backgroundColor: '#2196f3',
+                      }]
+              },
+              options: options
+          });
+          /********************************************************DICTIONARY WITH VALUES AND FREQUENCIES*****************************************************************/
+          var selectedAttributeFrequencies = {};
+          for(var k =0;k<selectedAttributeValues.length;k++)
+          {
+            if(selectedAttributeFrequencies.hasOwnProperty(selectedAttributeValues[k]) )
+            {
+              selectedAttributeFrequencies[selectedAttributeValues[k]]+=1;
+            }
+            else {
+              selectedAttributeFrequencies[selectedAttributeValues[k]]=1;
+            }
+          }
+          /******************************************************FILL HISTOGRAM PLOT WITH DATA*************************************************************/
+          var labels=[];
+          var data = []
+          var backgroundColor = []
+          var borderColor = []
+          for(var key in selectedAttributeFrequencies)
+          {
+            labels.push(key);
+            data.push(selectedAttributeFrequencies[key]);
+            backgroundColor.push('rgba(255, 99, 132, 0.2)');
+            borderColor.push('rgba(255,99,132,1)');
+          }
+
+
+          var ctx = document.getElementById("histogram");
+          var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Histogram of frequencies',
+                data: data,
+                backgroundColor: backgroundColor,
+                borderColor:borderColor,
+                borderWidth: 1
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: {
+                xAxes: [{
+                  ticks: {
+                    maxRotation: 90,
+                    minRotation: 80
+                  }
+                }],
+                yAxes: [{
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }]
+              }
+            }
+          });
+
+    });//HERE ENDS ON CLICK EVENT
+      /****************************************************************************************************************************************************/
+      $(document).bind('selectstart dragstart', function(e)
+       {
+        e.preventDefault(); return false;
+      });
+    });
+
+        var jsConnector;
+        var dataset = {};
+        var attributes = [];
+        var attributesRow = "";
+        function init() {
+           dataset = {};
+        }
+        /*
+        Do not delete
+        */
+        function getJsConnector() {
+            init();
+            return jsConnector;
+        }
+
+        function setVariables()
+         {
+            try
+              {
+                dataset = JSON.parse(window.javaConnector.exportDataset());
+                /***** dataset attributes ********/
+                for(key in dataset['Relation'][0])
+                {
+                  attributes.push(key);
+                }
+                /*********************************/
+                for(var i=0;i<attributes.length;i++)
+                {
+                  attributesRow = attributesRow.concat('<td>'+attributes[i]+'</td>');
+                }
+                /*********************************/
+                $('#dataset_table > tbody:last-child').append('<tr>'+attributesRow+'</tr>');
+                /*********************************/
+              }
+              catch (ex)
+              {
+                  $('.container').append('<h2> Error on parsing bundles <br>' + ex + '</h2>');
+              }
+        };
+
+        $(window).on('load', function ()
+         {
+
+         }
+        );
+
+
+    </script>
+
+
+</body>
+
+</html>

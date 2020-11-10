@@ -1,0 +1,21 @@
+
+.mainFxmlClass {
+
+    -fx-background-color: white;
+}
+
+.settings_btn:hover{
+    -fx-fill: #356fe4;
+}
+
+.chooseFile_btn{
+    -fx-background-color: #0b46a3;
+    -fx-border-radius: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.chooseFile_btn:hover{
+    -fx-background-color: #4287f5;
+    
+}
+

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.ShowAnalysisController">
+    <stylesheets>
+        <URL value="@/GUI/Styles/showanalysis.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane layoutX="650.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="55.0" prefWidth="150.0" style="-fx-background-color: white;">
+         <children>
+            <fx:include source="../Views/TitleBar.fxml" />
+         </children>
+      </AnchorPane>
+      <ScrollPane layoutX="7.0" layoutY="55.0" style="-fx-background-color: white;">
+         <content>
+            <WebView fx:id="webview" prefHeight="543.0" prefWidth="794.0" />
+         </content>
+      </ScrollPane>
+   </children>
+</AnchorPane>

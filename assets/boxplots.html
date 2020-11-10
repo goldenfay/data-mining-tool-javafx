@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="bootstrap-4.3.1-dist/js/jquery.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="Chart.js-2.9.2/dist/Chart.js"></script>
+    <script src="https://code.jscharting.com/latest/jscharting.js"></script>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css"
+        media="all" />
+    <script src="amcharts4/core.js"></script>
+    <script src="amcharts4/charts.js"></script>
+    <script src="amcharts4/themes/animated.js"></script>
+
+    <style>
+        .HTitle{
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #4041a3;
+            text-align: center;
+        }
+        .card-text b{
+            color: #f05f05;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="myChart" style="height: 400px; margin: auto; min-width: 310px; max-width: 600px"></div>
+        <div>
+            <div class="row" id="cardsDiv" style="margin-top: 50px;">
+                
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+
+        var logBackup = console.log;
+        var logMessages = [];
+
+        console.log = function () {
+            logMessages.push.apply(logMessages, arguments);
+            logBackup.apply(console, arguments);
+        };
+
+
+
+        var jsConnector;
+        var jsonBundle = {};
+        var resultsByattribut = [];
+        var attributs = [];
+
+
+        var data = [];
+        var boxValues = {};
+        var boxDatas = [];
+        var outliers = [];
+        
+
+
+
+        function constructDataSeries(attributeResult, index) {
+            fiveNSummary = attributeResult["FiveNumberSummary"];
+            outliers = [];
+            data = attributeResult["Values"];
+
+            var boxDatas = {},
+                values = {},
+                x = index,
+                y = data,
+                min = fiveNSummary["Min"],
+                max = fiveNSummary["Max"],
+                q1 = fiveNSummary["Q1"],
+                median = fiveNSummary["Median"],
+                q3 = fiveNSummary["Q3"],
+                iqr = q3 - q1,
+                lowerFence = q1 - (iqr * 1.5),
+                upperFence = q3 + (iqr * 1.5);
+
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] < lowerFence || data[i] > upperFence) {
+                    outliers.push([x, data[i]]);
+                }
+            }
+            boxDatas.values = {};
+            boxDatas.values.x = index + "f";
+            boxDatas.values.y = data;
+            boxDatas.values.low = lowerFence;
+            boxDatas.values.q1 = q1;
+            boxDatas.values.median = median;
+            boxDatas.values.q3 = q3;
+            boxDatas.values.high = upperFence;
+            boxDatas.values.mode = attributeResult["Mode"];
+            boxDatas.values.average = attributeResult["Average"];
+            boxDatas.outliers = outliers;
+            
+
+
+            return boxDatas;
+
+
+
+        }
+
+
+        function init() {
+            jsonBundle = {};
+            attributs = [];
+
+            data = [];
+        }
+
+        function getJsConnector() {
+            init();
+            return jsConnector;
+        };
+
+        function setVariables() {
+            try {
+                jsonBundle = JSON.parse(window.javaConnector.stringifyAllResults());
+                
+                flag = jsonBundle["SucessFlag"];
+                if (flag == "Fail") {
+                    $('.container').append('<h2> Error In bundles source </br> </h2>');
+                } else {
+
+                    //resultsByattribut = [];
+                    for (key in jsonBundle) {
+                        if (jsonBundle.hasOwnProperty(key))
+                            if (key.startsWith("Attribute")) {
+                                resultsByattribut.push(jsonBundle[key]);
+                                attributs.push(key.replace("Attribute","").replace("_"," "));
+                            }
+                    }
+
+                }
+
+
+            } catch (ex) {
+                $('.container').append('<h2> Error on parsing bundles <br>' + ex + '</h2>');
+            }
+
+
+        };
+
+
+
+
+
+        $(window).on('load', function () {
+
+            
+            window.jsConnector = {
+                showBoxplot: function () {
+
+
+                    // Themes begin
+                    am4core.useTheme(am4themes_animated);
+                    // Themes end
+
+                    var chart = am4core.create("myChart", am4charts.XYChart);
+                    chart.paddingRight = 20;
+                    
+
+                    //chart.dateFormatter.inputDateFormat = "yyyy-MM-dd";
+
+                    var dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+                    dateAxis.renderer.minGridDistance = 40;
+                    dateAxis.renderer.grid.template.location = 0;
+                    dateAxis.parseDates=false;
+                    dateAxis.tooltip.disabled = true;
+
+                    
+
+
+                    var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                    valueAxis.tooltip.disabled = false;
+
+                    var series = chart.series.push(new am4charts.CandlestickSeries());
+                    series.dataFields.dateX = "arrt";
+                    series.dataFields.valueY = "close";
+                    series.dataFields.openValueY = "open";
+                    series.dataFields.lowValueY = "low";
+                    series.dataFields.highValueY = "high";
+                    series.simplifiedProcessing = true;
+                    series.tooltipText = "Min: {lowValueY.value}\nQ1: {valueY.value}\nMedian: {mediana}\nQ3: {openValueY.value}\nMax: {highValueY.value}";
+                    series.riseFromOpenState = undefined;
+                    series.dropFromOpenState = undefined;
+
+                    chart.cursor = new am4charts.XYCursor();
+
+                    var medianaSeries = chart.series.push(new am4charts.StepLineSeries());
+                    medianaSeries.noRisers = true;
+                    medianaSeries.startLocation = 0.1;
+                    medianaSeries.endLocation = 0.9;
+                    medianaSeries.dataFields.valueY = "mediana";
+                    medianaSeries.dataFields.dateX = "arrt";
+                    medianaSeries.strokeWidth = 2;
+                    medianaSeries.stroke = am4core.color("#fff");
+
+
+                    var topSeries = chart.series.push(new am4charts.StepLineSeries());
+                    topSeries.noRisers = true;
+                    topSeries.startLocation = 0.2;
+                    topSeries.endLocation = 0.8;
+                    topSeries.dataFields.valueY = "high";
+                    topSeries.dataFields.dateX = "arrt";
+                    topSeries.stroke = chart.colors.getIndex(0);
+                    topSeries.strokeWidth = 2;
+
+                    var bottomSeries = chart.series.push(new am4charts.StepLineSeries());
+                    bottomSeries.noRisers = true;
+                    bottomSeries.startLocation = 0.2;
+                    bottomSeries.endLocation = 0.8;
+                    bottomSeries.dataFields.valueY = "low";
+                    bottomSeries.dataFields.dateX = "arrt";
+                    bottomSeries.stroke = chart.colors.getIndex(0);
+                    bottomSeries.strokeWidth = 2;
+
+                    var bottomSeries = chart.series.push(new am4charts.StepLineSeries());
+                    bottomSeries.noRisers = true;
+                    bottomSeries.startLocation = 0.2;
+                    bottomSeries.endLocation = 0.8;
+                    bottomSeries.dataFields.valueY = "low";
+                    bottomSeries.dataFields.dateX = "arrt";
+                    bottomSeries.stroke = chart.colors.getIndex(0);
+                    bottomSeries.strokeWidth = 2;
+
+
+                    var outlierSeries = chart.series.push(new am4charts.StepLineSeries());
+                    outlierSeries.noRisers = true;
+                    outlierSeries.startLocation = 0.2;
+                    outlierSeries.endLocation = 0.22;
+                    outlierSeries.dataFields.valueY = "outlier";
+                    outlierSeries.dataFields.dateX = "arrt";
+                    outlierSeries.tooltipText="Outlier ";
+                    outlierSeries.stroke ="#eb4034";
+                    outlierSeries.strokeWidth = 6;
+
+
+                    chart.scrollbarX = new am4core.Scrollbar();
+                    chart.data=[];
+                    for (var j = 0; j < resultsByattribut.length; j++) {
+                            //Fill in chart data
+                        var res = constructDataSeries(resultsByattribut[j], j);
+                        chart.data.push({
+                            "arrt": j,
+                            "open": res.values.q3,
+                            "high": res.values.high,
+                            "low": res.values.low,
+                            "close": res.values.q1,
+                            "outlier": outliers[j][1]
+                            
+                        });
+
+                            //Fill in card infos
+                        
+                        $('#cardsDiv').append('<div class="col-sm-4"> <div class="card shadow">'
+                                        +'<div class="card-body">'
+                                            +'<h5 class="card-title HTitle">'+attributs[j]+'</h5>'
+                                                +'<p class="card-text"><b> Average :</b>'
+                                                                    +(res.values.average<0?"Uncalculated":res.values.average.toFixed(2))+'</br>'
+                                                         +'<b> Mode :</b>'
+                                                          +res.values.mode.toFixed(2)
+                                                          +'</p>'
+                                        +'</div>'
+                                        +'</div> </div>')    ;
+
+
+                    }
+
+                    addMediana();
+
+                    function addMediana() {
+                        for (var i = 0; i < chart.data.length; i++) {
+                            var dataItem = chart.data[i];
+                            dataItem.mediana = Number(dataItem.low) + (Number(dataItem.high) - Number(dataItem.low)) / 2;
+                        }
+                    }
+
+
+
+
+                }
+
+            }
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

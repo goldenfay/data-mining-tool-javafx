@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="bootstrap-4.3.1-dist/js/jquery.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="Chart.js-2.9.2/dist/Chart.js"></script>
+    <style>
+        tr {
+            cursor: default;
+        }
+
+        .highlight {
+            background: yellow;
+        }
+
+        select {
+            margin: 5px 20px 5px 10px;
+        }
+
+        #correlationResults h3 {
+            color: #4287f5;
+        }
+
+        #correlationResults h4 {
+            color: #f05f05;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <ul class="nav nav-tabs">
+            <li class="nav-item active"><a class="nav-link" data-toggle="tab" href="#AttributsSummary">Attribute's
+                    despersion summary</a></li>
+            <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#correlationTab">Correlation Analysis</a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content">
+            <!-- FIRST TAB -->
+            <div class="tab-pane fade in active" id="AttributsSummary">
+                <div class="row">
+                    <div class="col-sm-3"></div>
+                    <div class="col-sm-6">
+                        <h3 class="text-center">List of Attributes</h3>
+                    </div>
+
+                    <div class="col-sm-3"></div>
+
+                </div>
+                <div class="row">
+                    <table id="dataset_table" border="1" class="table">
+
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row" width="600" height="800" border="1">
+                    <canvas width="400" height="400" id="myChart"></canvas>
+                </div>
+
+                <div class="row" style="margin: 20px 0px 20px 0px;">
+
+                </div>
+                <div class="row" width="600" height="800" border="1">
+                    <canvas id="histogram" width="400" height="400"></canvas>
+                </div>
+            </div>
+
+            <!-- SECOND TAB -->
+            <div class="tab-pane fade" id="correlationTab">
+                <div class="row">
+
+
+                </div>
+
+                <div class="row">
+                    <form class="form">
+                        <legend>Choose 2 attributs to analyze correlation </legend>
+                        <div class="form-group">
+                            <label for="firstAttr">Attribute 1:</label>
+                            <select id="firstAttr">
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="secondAttr">Attribute 2:</label>
+                            <select id="secondAttr">
+
+                            </select>
+                        </div>
+                        <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                        <div class="">
+                            <p class="alert alert-danger d-none" role="alert"></p>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="row">
+                    <div>
+                        <canvas id="correlationChart" width="600" height="400"></canvas>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-6 offset-sm-3" id="correlationResults"></div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        var glbl = true;
+
+        var jsConnector;
+        var dataset = {};
+        var attributes = [];
+        var nominalAttributs = [];
+        var attributesRow = "";
+        var selectedAttributeValues = [];
+        var rows;
+        var firstAttribut = null, secondAttribut = null;
+
+
+        window.jsConnector = {
+        }
+
+        function init() {
+            dataset = {};
+        }
+
+        function getJsConnector() {
+            init();
+            return jsConnector;
+        }
+
+        function setVariables() {
+            try {
+                dataset = JSON.parse(window.javaConnector.exportDataset());
+                /***** dataset attributes ********/
+                for (key in dataset['Relation'][0]) {
+                    attributes.push(key);
+                }
+                nominalAttributs = dataset['NominalAttributs'];
+
+                /*********************************/
+                constructSecondTabComponents();
+
+                count = 0;
+                for (var i = 0; i < attributes.length; i++) {
+                    if (count == 4) {
+                        attributesRow.concat('<tr>');
+                        count = 0;
+
+                    }
+                    attributesRow = attributesRow.concat('<td>' + attributes[i] + '</td>');
+                    count++;
+                    if (count == 4) {
+                        attributesRow.concat('</tr>')
+                    }
+
+
+                }
+                /*********************************/
+                //$('#dataset_table > tbody:last-child').append(attributesRow);
+                $('#dataset_table tbody').append(attributesRow);
+                /*********************************/
+
+                rows = $('td');
+
+                rows.on('click', function (e) {
+                    /*********REPLACE CANVAS BY A NEW ONE TO BE ABLE TO REDRAW SCATTER***************/
+                    var aEl = document.getElementById("myChart");
+                    var newEl = document.createElement('canvas');
+                    newEl.height = "400";
+                    newEl.id = "myChart";
+                    aEl.parentNode.replaceChild(newEl, aEl);
+                    aEl = document.getElementById("histogram");
+                    newEl = document.createElement('canvas');
+                    newEl.height = "400";
+                    newEl.id = "histogram";
+                    aEl.parentNode.replaceChild(newEl, aEl);
+                    /********************************************************/
+                    var row = $(this);
+                    var selectedAttribute = row;
+                    rows.removeClass('bg-info');
+                    row.addClass('bg-info');
+
+                    /*****************************************************FILL SCATTER PLOT WITH DATA*************************************************************/
+                    displayScatterChart(row);
+                    /********************************************************DICTIONARY WITH VALUES AND FREQUENCIES*****************************************************************/
+                    displayHistograme(row);
+
+                });//HERE ENDS ON CLICK EVENT
+                /****************************************************************************************************************************************************/
+                $(document).bind('selectstart dragstart', function (e) {
+                    //e.preventDefault(); return false;
+                });
+            }
+            catch (ex) {
+                $('.container').append('<h2> Error on parsing bundles <br>' + ex + '</h2>');
+            }
+        };
+
+        $(window).on('load', function () {
+
+            $('#submit').on('click', function (e) {
+                $('.alert-danger').html('');
+                $('.alert-danger').addClass('d-none');
+                e.preventDefault();
+
+                var index1 = $('#firstAttr')[0].selectedIndex;
+                var index2 = $('#secondAttr')[0].selectedIndex;
+                if (index1 != index2) {
+                    if ((isNominal(attributes[index1]) && isNominal(attributes[index2]))
+                        || (!isNominal(attributes[index1]) && !isNominal(attributes[index2]))) {
+
+                        displayCorrelationChart(index1, index2);
+                    }
+                    else
+                        $('.alert-danger').append("Correlation can't be calculated between a nominal and a non-nominal attribute.");
+                    $('.alert-danger').removeClass('d-none');
+                }
+                else {
+                    $('.alert-danger').append("Correlation can't be calculated for same attribute.");
+                    $('.alert-danger').removeClass('d-none');
+                }
+
+
+
+            });
+        });
+
+
+        function displayScatterChart(row) {
+
+            var ctx = document.getElementById("myChart").getContext('2d');
+
+            var j = 1;
+            var data = [];
+            var obj = {};
+            for (var i = 0; i < attributes.length; i++) {
+                if ((attributes[i].localeCompare(row.text())) == 0) {
+                    for (variable in dataset['Relation']) {
+                        data.push({ x: j, y: dataset['Relation'][variable][attributes[i]] });
+                        selectedAttributeValues.push(dataset['Relation'][variable][attributes[i]]);
+                        j = j + 1;
+                    }
+                }
+            }
+
+            var options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Instances'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Values'
+                        }
+                    }]
+                }
+            };
+
+            // End Defining data
+            var myChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Data dispersion(' + row.text() + ')',
+                        data: data,
+                        borderColor: '#2196f3',
+                        backgroundColor: '#2196f3',
+                    }]
+                },
+                options: options
+            });
+        }
+
+        function displayHistograme(row) {
+            var selectedAttributeFrequencies = {};
+            for (var k = 0; k < selectedAttributeValues.length; k++) {
+                if (selectedAttributeFrequencies.hasOwnProperty(selectedAttributeValues[k])) {
+                    selectedAttributeFrequencies[selectedAttributeValues[k]] += 1;
+                }
+                else {
+                    selectedAttributeFrequencies[selectedAttributeValues[k]] = 1;
+                }
+            }
+            /******************************************************FILL HISTOGRAM PLOT WITH DATA*************************************************************/
+            var labels = [];
+            var data = []
+            var backgroundColor = []
+            var borderColor = []
+            for (var key in selectedAttributeFrequencies) {
+                labels.push(key);
+                data.push(selectedAttributeFrequencies[key]);
+                backgroundColor.push('rgba(255, 99, 132, 0.2)');
+                borderColor.push('rgba(255,99,132,1)');
+            }
+
+
+            var ctx = document.getElementById("histogram");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Histogram of frequencies',
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    title: {
+                        display: true,
+                        text: 'Data frequency distribution for ' + row.text() + '.'
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 80
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Values'
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Frequencies'
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+
+
+        function constructSecondTabComponents() {
+            for (var i = 0; i < attributes.length; i++) {
+                $('#firstAttr, #secondAttr').append('<option value="' + attributes[i] + '"">' + attributes[i] + '</option>')
+            }
+
+
+            $('#firstAttr,#secondAttr').change(function () {
+
+
+                if ($(this).attr('id') == "firstAttr") {
+                    firstAttribut = $(this).find("option:selected").attr("value");
+
+
+                }
+
+                if ($(this).attr('id') == "secondAttr") {
+                    secondAttribut = $(this).find("option:selected").attr("value");
+
+                }
+
+
+                if (firstAttribut != null && secondAttribut != null)
+                    $('#submit').removeAttr('disabled');
+            });
+
+
+        }
+
+
+        function displayCorrelationChart(index1, index2) {
+
+            var aEl = document.getElementById("correlationChart");
+            var newEl = document.createElement('canvas');
+            newEl.height = "400";
+            newEl.width = "600";
+            newEl.id = "correlationChart";
+            aEl.parentNode.replaceChild(newEl, aEl);
+
+            var ctx = document.getElementById("correlationChart").getContext('2d');
+            var att1 = attributes[index1], att2 = attributes[index2];
+            var j = 1;
+            var data = [];
+            var obj = {};
+            for (var i = 0; i < dataset['Relation'].length; i++) {
+                var instance = dataset['Relation'][i];
+                data.push({ x: instance[att1], y: instance[att2] });
+            }
+
+            calculateCorrelation(data, isNominal(attributes[index2]));
+
+            var options = {
+                responsive: true,
+                maintainAspectRatio: false,
+                title: {
+                    display: true,
+                    text: 'Correlation plot between ' + att1 + ' and ' + att2 + '.'
+                },
+                scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: att1 + '.'
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: att2 + '.'
+                        }
+                    }]
+                }
+            };
+
+            // End Defining data
+            var myChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: '',
+                        data: data,
+                        borderColor: '#2196f3',
+                        backgroundColor: '#2196f3',
+                    }]
+                },
+                options: options
+            });
+
+        }
+
+
+
+        function calculateCorrelation(jsonObj, nominalFlag) {
+            /** format [{x:val1,y:val2}]
+            */
+            if (!nominalFlag)
+                try {
+                    var meanA = 0, meanB = 0;
+                    var svA = 0, svB = 0;
+                    // Calculate Mean
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        meanA += jsonObj[i].x;
+                        meanB += jsonObj[i].y;
+                    }
+                    // Calculate Standard deviation
+                    var sumSQ1 = 0, sumSQ2 = 0;
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        sumSQ1 += Math.pow(jsonObj[i].x - meanA, 2);
+                        sumSQ2 += Math.pow(jsonObj[i].y - meanB, 2);
+                    }
+                    svA = Math.sqrt((1 / (jsonObj.length - 1) * sumSQ1));
+                    svB = Math.sqrt((1 / (jsonObj.length - 1) * sumSQ2));
+                    // Calculate Correlation
+                    var cor = 0;
+                    for (var i = 0; i < jsonObj.length; i++) {
+                        cor += ((jsonObj[i].x - meanA) * (jsonObj[i].y - meanB)) / ((jsonObj.length) * svA * svB);
+                    }
+
+                    $('#correlationResults').html('<h3  class="text-wrap text-center"> Correlation : </h3> <h4  class="text-wrap text-center">' + cor + '</h4>');
+                } catch (ex) {
+                    $('.alert-danger').append('Errror :' + ex);
+                    $('.alert-danger').removeClass('d-none');
+                }
+
+
+            else { // Correlation for two nominal attributes
+
+                var att1Frequencies = {},att2Frequencies = {};
+                for (var k = 0; k < jsonObj.length; k++) {
+                    if (att1Frequencies.hasOwnProperty(jsonObj[k].x)) {
+                        att1Frequencies[jsonObj[k].x] += 1;
+                    }
+                    else {
+                        att1Frequencies[jsonObj[k].x] = 1;
+                    }
+
+                    if (att2Frequencies.hasOwnProperty(jsonObj[k].y)) {
+                        att2Frequencies[jsonObj[k].y] += 1;
+                    }
+                    else {
+                        att2Frequencies[jsonObj[k].y] = 1;
+                    }
+                }
+
+
+                
+
+            }
+
+        }
+
+        function isNominal(attname) {
+            return nominalAttributs.indexOf(attname) >= 0;
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>

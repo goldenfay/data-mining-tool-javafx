@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="AnchorPane" prefHeight="720.0" prefWidth="720.0" styleClass="mainFxmlClass" stylesheets="@../Styles/clusteringgui.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GUI.Controllers.ClusteringGUIController">
+   <children>
+      <Button fx:id="settingsBtn" layoutX="234.0" layoutY="-1.0" maxHeight="50.0" mnemonicParsing="false" onAction="#openSettingsWindow" prefHeight="46.0" prefWidth="52.0" style="-fx-background-color: transparent;" styleClass="settings_btn" textFill="#1b4cc6">
+         <graphic>
+            <FontAwesomeIcon fill="#1b53c4" glyphName="COG" size="2.5em" styleClass="settings_btn" />
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <AnchorPane layoutX="568.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="55.0" prefWidth="150.0">
+         <children>
+            <fx:include source="../Views/TitleBar.fxml" />
+         </children>
+      </AnchorPane>
+      <TabPane layoutX="6.0" layoutY="45.0" prefHeight="663.0" prefWidth="708.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="K-Medoid">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="562.0" layoutY="76.0" mnemonicParsing="false" onAction="#startMedoidClustering" prefHeight="55.0" prefWidth="121.0" styleClass="start_clustering_kmedoid" text="Start Clustering" textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font name="Roboto" size="14.0" />
+                           </font>
+                        </Button>
+                        <ScrollPane fx:id="visualizationSP" layoutX="26.0" layoutY="152.0">
+                           <content>
+                              <VBox fx:id="resultsVcontainer" style="-fx-background-color: white;">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="40.0" style="-fx-background-color: #0b46a3;;" styleClass="default_element">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="K-Medoid Clustering Results" textAlignment="CENTER" wrappingWidth="646.9830722808838">
+                                             <font>
+                                                <Font name="Roboto Bold" size="22.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox styleClass="default_element">
+                                       <children>
+                                          <Text fx:id="finalTitle" fill="#0b46a3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Final Cluster Set" wrappingWidth="646.9830722808838">
+                                             <font>
+                                                <Font name="Times New Roman Bold" size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <TableView fx:id="kmedoid_clustersTV" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                       <columns>
+                                          <TableColumn prefWidth="84.0" text="Cluster" />
+                                          <TableColumn minWidth="0.0" prefWidth="87.0" text="Medoid" />
+                                          <TableColumn prefWidth="549.0" text="Members" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="itemSet_tv" />
+                                          <String fx:value="default_element" />
+                                       </styleClass>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <Text fill="#0b46a3" layoutX="26.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Clusters number:" wrappingWidth="149.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="kmedoi_clusternbr_label" fill="#0b46a3" layoutX="169.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" wrappingWidth="68.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <VBox fx:id="KMedoid_execResultsVB" layoutX="31.0" layoutY="450.0" prefHeight="137.0" prefWidth="356.0">
+                           <children>
+                              <Text fill="#0b46a3" strokeType="OUTSIDE" strokeWidth="0.0" text="Execution Results:" textAlignment="CENTER" wrappingWidth="354.13671875">
+                                 <font>
+                                    <Font name="Times New Roman Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="356.0">
+                                 <children>
+                                    <Text fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" text="Execution time :" wrappingWidth="166.13671875" />
+                                    <Text fx:id="kmedoid_execTime_label" fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="181.13671875" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="356.0">
+                                 <children>
+                                    <Text fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" text="Best cost :" wrappingWidth="166.13671875" />
+                                    <Text fx:id="kmedoid_bestcostlabel" fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="181.13671875" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="CLARANS">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Button layoutX="563.0" layoutY="86.0" mnemonicParsing="false" onAction="#startClaransClustering" prefHeight="55.0" prefWidth="121.0" styleClass="start_clustering_kmedoid" text="Start Clustering" textFill="WHITE">
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                           <font>
+                              <Font name="Roboto" size="14.0" />
+                           </font>
+                        </Button>
+                        <ScrollPane fx:id="clarans_visualizationSP" layoutX="25.0" layoutY="160.0" prefHeight="286.0" prefWidth="659.0">
+                           <content>
+                              <VBox fx:id="clarans_resultsVcontainer" style="-fx-background-color: white;">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="40.0" style="-fx-background-color: #0b46a3;;" styleClass="default_element">
+                                       <children>
+                                          <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="CLARANS Clustering Results" textAlignment="CENTER" wrappingWidth="646.9830722808838">
+                                             <font>
+                                                <Font name="Roboto Bold" size="22.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <HBox styleClass="default_element">
+                                       <children>
+                                          <Text fx:id="finalTitle1" fill="#0b46a3" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Final Cluster Set" wrappingWidth="646.9830722808838">
+                                             <font>
+                                                <Font name="Times New Roman Bold" size="16.0" />
+                                             </font>
+                                             <HBox.margin>
+                                                <Insets left="10.0" />
+                                             </HBox.margin>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                    <TableView fx:id="clarans_clustersTV" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: white;">
+                                       <columns>
+                                          <TableColumn prefWidth="84.0" text="Cluster" />
+                                          <TableColumn minWidth="0.0" prefWidth="87.0" text="Medoid" />
+                                          <TableColumn prefWidth="549.0" text="Members" />
+                                       </columns>
+                                       <VBox.margin>
+                                          <Insets top="10.0" />
+                                       </VBox.margin>
+                                       <styleClass>
+                                          <String fx:value="itemSet_tv" />
+                                          <String fx:value="default_element" />
+                                       </styleClass>
+                                    </TableView>
+                                 </children>
+                              </VBox>
+                           </content>
+                        </ScrollPane>
+                        <VBox fx:id="clarans_execResultsVB" layoutX="39.0" layoutY="460.0" prefHeight="137.0" prefWidth="356.0">
+                           <children>
+                              <Text fill="#0b46a3" strokeType="OUTSIDE" strokeWidth="0.0" text="Execution Results:" textAlignment="CENTER" wrappingWidth="354.13671875">
+                                 <font>
+                                    <Font name="Times New Roman Bold" size="16.0" />
+                                 </font>
+                              </Text>
+                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="356.0">
+                                 <children>
+                                    <Text fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" text="Execution time :" wrappingWidth="166.13671875" />
+                                    <Text fx:id="clarans_execTime_label" fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="181.13671875" />
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="356.0">
+                                 <children>
+                                    <Text fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" text="Best Node instance :" wrappingWidth="166.13671875" />
+                                    <ScrollPane>
+                                       <content>
+                                          <Text fx:id="clarans_bestnode_label" fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="181.13671875" />
+                                       </content>
+                                    </ScrollPane>
+                                 </children>
+                              </HBox>
+                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="356.0">
+                                 <children>
+                                    <Text fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" text="Best cost :" wrappingWidth="166.13671875" />
+                                    <Text fx:id="clarans_bestcostlabel" fill="#105ac9" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="181.13671875" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Text fill="#0b46a3" layoutX="30.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Clusters number:" wrappingWidth="223.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="clarans_clusternbr_label" fill="#0b46a3" layoutX="314.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" wrappingWidth="68.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#0b46a3" layoutX="32.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Maximum neighbors:" wrappingWidth="194.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="clarans_cmaxneighborslabel" fill="#0b46a3" layoutX="314.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" wrappingWidth="68.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fill="#0b46a3" layoutX="32.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" text="Num Local :" wrappingWidth="223.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                        <Text fx:id="clarans_numlocallabel" fill="#0b46a3" layoutX="316.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="itemSetTitle_txt" wrappingWidth="68.99998569488525">
+                           <font>
+                              <Font name="Times New Roman Bold" size="16.0" />
+                           </font>
+                        </Text>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

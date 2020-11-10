@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.web.WebView?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" style="-fx-background-color: white;" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="GUI.Controllers.AttributsExplorationController">
+    <stylesheets>
+        <URL value="@/GUI/Styles/attributsexploration.css" />
+    </stylesheets>
+   <children>
+      <AnchorPane layoutX="560.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="55.0" prefWidth="150.0">
+         <children>
+            <fx:include source="../Views/TitleBar.fxml" />
+         </children>
+      </AnchorPane>
+      <WebView fx:id="webView" layoutY="50.0" prefHeight="449.0" prefWidth="710.0" />
+   </children>
+</AnchorPane>

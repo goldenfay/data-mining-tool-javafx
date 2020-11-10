@@ -1,0 +1,52 @@
+
+.mainFxmlClass {
+    -fx-background-color:white;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);
+}
+
+.check-box {
+    /* default properties */
+    selected-box-color: #387ad6;
+    box-color: white;
+    mark-color: white;
+    
+}
+
+.check-box:selected > .box {
+    /* background color for selected checkbox */
+    -fx-background-color: selected-box-color;
+}
+
+.check-box > .box {
+    /* background color of unselected checkbox */
+    -fx-background-color: box-color;
+    -fx-border-color:#387ad6;
+    -fx-border-radius: 4px;
+}
+
+.check-box:selected > .box > .mark,
+.check-box:indeterminate  > .box > .mark {
+    /* modify mark color */
+    -fx-background-color: mark-color;
+}
+
+
+
+
+.btn{
+    -fx-background-color:transparent;
+    -fx-border-radius:0px;
+}
+.confirm_btn{
+    -fx-background-color:#64dd17;
+    -fx-text-fill:#ffffff;
+}
+.confirm_btn:hover {
+    -fx-background-color:#76ff03;
+}
+.cancel_btn {
+    -fx-background-color:#b7babf;
+}
+.cancel_btn:hover {
+    -fx-background-color:#c9cacc;
+}

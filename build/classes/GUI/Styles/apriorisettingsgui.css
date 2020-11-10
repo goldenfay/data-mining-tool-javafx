@@ -1,0 +1,58 @@
+
+.mainFxmlClass {
+    -fx-background-color: white;
+}
+.slider .track {
+      -fx-background-color:
+          -fx-shadow-highlight-color,
+          linear-gradient(to bottom, derive(-fx-text-box-border, -10%), -fx-text-box-border),
+          linear-gradient(to bottom,
+            derive(-fx-control-inner-background, -9%),
+            derive(-fx-control-inner-background, 0%),
+            derive(-fx-control-inner-background, -5%),
+            derive(-fx-control-inner-background, -12%)
+          );
+    -fx-background-insets: 1 1 0 1, 0, 1;
+    -fx-background-radius: 0.25em, 0.25em, 0.166667em; /* 3 3 2 */
+    -fx-padding: 0.25em; /* 3 */
+}
+
+.upload_btn{
+    
+    -fx-border-color:#c128ef;
+    -fx-border-width: 0px 3px 5px 0px;
+}
+.slider .thumb{
+    -fx-background-color: white;
+    -fx-border-radius: 50%;
+    -fx-border-color: #387ad6;
+}
+.slider .thumb:pressed{
+    -fx-background-color: #387ad6;
+    -fx-background-radius: 50%, 50%, 50%; 
+    -fx-border-color: white;
+    
+}
+.upload_btn:hover{
+    -fx-border-color:#d75def;
+    -fx-text-fill:#959096;
+    -fx-cursor:hand;
+}
+
+.btn{
+    -fx-background-color:transparent;
+    -fx-border-radius:0px;
+}
+.confirm_btn{
+    -fx-background-color:#64dd17;
+    -fx-text-fill:#ffffff;
+}
+.confirm_btn:hover {
+    -fx-background-color:#76ff03;
+}
+.cancel_btn {
+    -fx-background-color:#b7babf;
+}
+.cancel_btn:hover {
+    -fx-background-color:#c9cacc;
+}

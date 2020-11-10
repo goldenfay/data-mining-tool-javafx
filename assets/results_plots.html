@@ -1,0 +1,222 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>Line Chart Multiple Axes</title>
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="bootstrap-4.3.1-dist/js/jquery.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="Chart.js-2.9.2/dist/Chart.js"></script>
+    <style>
+        canvas {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width:75%;">
+        <canvas id="canvas"></canvas>
+    </div>
+    <button id="randomizeData">Randomize Data</button>
+    <script>
+        var kmedoid_results = { "[15,3]": 0.16345307, "[15,5]": 0.12172269, "[15,8]": 0.18611029, "[15,10]": 0.13922252, "[18,3]": 0.15451033, "[18,5]": 0.09318503, "[18,8]": 0.16301878, "[18,10]": 0.08133264 }
+        var clarans_results = { "[15,3]": 0.481278, "[15,5]": 0.197623, "[15,8]": 0.337508, "[15,10]": 0.371951, "[18,3]": 0.173718, "[18,5]": 0.389888, "[18,8]": 0.312427, "[18,10]": 0.831679 }
+
+        var kmedoid_results2 = { "[8,3]": 0.07180387, "[8,5]": 0.18431112, "[8,8]": 0.07801059, "[8,10]": 0.08531795, "[12,3]": 0.05340914, "[12,5]": 0.11861621, "[12,8]": 0.05869908, "[12,10]": 0.52589135 }
+        var clarans_results2 = { "[8,3]": 0.120969, "[8,5]": 0.197183, "[8,8]": 0.258126, "[8,10]": 0.30913, "[12,3]": 0.500806, "[12,5]": 0.214828, "[12,8]": 0.211022, "[12,10]": 0.300185 }
+
+        var kmedoid_results3 = { "[4,3]": 0.040145897, "[4,5]": 0.105510521, "[4,8]": 0.040480647, "[4,10]": 0.037080926 }
+        var clarans_results3 = { "[4,3]": 0.315444, "[4,5]": 0.28497, "[4,8]": 0.197844, "[4,10]": 0.304399 }
+
+
+        var kmedoid_results4 = { "[4,1]": 0.88154403, "[4,2]": 0.73137964, "[8,1]": 2.31956306, "[8,2]": 1.13336083, "[12,1]": 1.783286870, "[12,2]": 2.003246971, "[15,1]": 2.547680450, "[15,2]": 3.838269334, "[18,1]": 2.081472793, "[18,2]": 3.281492721 }
+        var clarans_results4 = { "[4,1]": 0.616757, "[4,2]": 0.190867, "[8,1]": 0.323553, "[8,2]": 0.116471, "[12,1]": 0.388633, "[12,2]": 0.218327, "[15,1]": 0.118825, "[15,2]": 0.166384, "[18,1]": 0.250939, "[18,2]": 0.274136 }
+ 
+         var apriori_results = { "0.1": 0.143, "0.2": 0.093, "0.3": 0.057, "0.4": 0.062, "0.5": 0.06, "0.6": 0.059, "0.7": 0.062, "0.8": 0.055, "0.9": 0.056 }
+        var eclat_results = { "2": 0.074, "3": 0.045, "4": 0.032, "5": 0.036000000000000004, "6": 0.043, "7": 0.022000000000000002, "8": 0.044, "9": 0.024, "10": 0.029, "11": 0.027000000000000003, "12": 0.018000000000000002, "13": 0.018000000000000002, "14": 0.018, "15": 0.019, "16": 0.021, "17": 0.018, "18": 0.02, "19": 0.024999999999999998, "20": 0.014000000000000002, "21": 0.015, "22": 0.028, "23": 0.030999999999999996, "24": 0.012, "25": 0.02, "26": 0.012, "27": 0.030000000000000006, "28": 0.022000000000000002, "29": 0.018000000000000002 }
+
+        
+
+        window.onload = function () {
+           
+
+            data = Array();
+            data2 = Array();
+            data3 = Array()
+            data4 = Array()
+            labels=labels2=labels3=labels4 = Array();
+            var backgroundColor = [];
+            var borderColor = [];
+            var backgroundColor2 = [];
+            var borderColor2 = [];
+            var backgroundColor3 = [];
+            var borderColor3 = [];
+            var backgroundColor4 = [];
+            var borderColor4 = [];
+            labels4=["[4,1]","[4,2]","[4,3]","[4,5]","[4,8]","[4,10]","[8,1]","[8,2]","[8,3]","[8,5]","[8,8]","[8,10]","[12,1]","[12,2]","[12,3]","[12,5]","[12,8]","[12,10]","[15,1]","[15,2]","[15,3]","[15,5]","[15,8]","[15,10]","[18,1]","[18,2]","[18,3]","[18,5]","[18,8]","[18,10]"];
+           
+            for (key in kmedoid_results) {
+                data.push({ x: key, y: kmedoid_results[key] });
+                labels.push(key);
+                backgroundColor.push('rgba(255, 99, 132, 0.4)');
+                borderColor.push('rgba(255,99,132,1)');
+
+
+            }
+            for (key in clarans_results2) {
+                data2.push({ x: key, y: clarans_results2[key] });
+                labels2.push(key);
+                backgroundColor2.push('rgba(252, 186, 3, 0.4)');
+                borderColor2.push('rgba(252, 186, 3,1)');
+
+
+            }
+            for (key in clarans_results3) {
+                data3.push({ x: key, y: clarans_results3[key] });
+                labels3.push(key);
+                backgroundColor3.push('rgba(59, 255, 95, 0.4)');
+                borderColor3.push('rgba(59, 255, 95,1)');
+
+
+            }
+            for (key in clarans_results4) {
+                data4.push({ x: key, y: clarans_results4[key] });
+                //labels4.push(key);
+                backgroundColor4.push('rgba(99, 130, 255, 0.4)');
+                borderColor4.push('rgba(99, 130, 255,1)');
+
+
+            }
+
+            // for (key in clarans_results) {
+            //     data2.push({ x: parseFloat(key), y: clarans_results[key] });
+            //     backgroundColor2.push('rgba(99, 130, 255, 0.2 )');
+            //     borderColor2.push('rgba(99, 130, 255,1)');
+
+
+            // }
+            data2.sort();
+            data.sort();
+            data3.sort();
+            data4.sort();
+            // labels.sort();
+            console.log(data2)
+            var ctx = document.getElementById("canvas");
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels4,
+                    datasets: [/*{
+                        label: 'Inférence',
+                        data: data2,
+                        backgroundColor: backgroundColor2,
+                        borderColor: borderColor2,
+                        borderWidth: 3,
+                        fill: false,
+                        yAxisID: 'y',
+                        xAxisID: 'x'
+
+                    },*/
+                    {
+                        label: 'Graphes fortement connectés',
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 3,
+                        fill: false,
+                        yAxisID: 'y',
+                        xAxisID: 'x'
+                    },
+                    {
+                        label: 'Graphes moyennement connectés',
+                        data: data2,
+                        backgroundColor: backgroundColor2,
+                        borderColor: borderColor2,
+                        borderWidth: 3,
+                        fill: false,
+                        yAxisID: 'y',
+                        xAxisID: 'x'
+                    },
+                    {
+                        label: 'Graphes faiblement connectés',
+                        data: data3,
+                        backgroundColor: backgroundColor3,
+                        borderColor: borderColor3,
+                        borderWidth: 3,
+                        fill: false,
+                        yAxisID: 'y',
+                        xAxisID: 'x'
+                    },
+                    {
+                        label: 'Poly-arbres',
+                        data: data4,
+                        backgroundColor: backgroundColor4,
+                        borderColor: borderColor4,
+                        borderWidth: 3,
+                        fill: false,
+                        yAxisID: 'y',
+                        xAxisID: 'x'
+                    }
+
+                    ]
+                },
+                options: {
+
+                    title: {
+                        display: true,
+                        text: 'Temps d\'executions de l\'inférence pour les différents types.'
+                    },
+                    scales: {
+                        xAxes: [{
+                            ticks: {
+                                maxRotation: 90,
+                                minRotation: 80
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Architectur [Nombres noeuds,nombre noeuds parents]'
+                            },
+                            id: 'x'
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Temps d\execution'
+                            },
+                            id: 'y'
+                        },
+                        {
+                            type: 'linear', // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+                            display: false,
+                            position: 'right',
+                            id: 'y1',
+
+                        }
+
+                        ]
+                    }
+                }
+            });
+        };
+
+
+        document.getElementById('randomizeData').addEventListener('click', function () {
+            lineChartData.datasets.forEach(function (dataset) {
+                dataset.data = dataset.data.map(function () {
+                    return randomScalingFactor();
+                });
+            });
+
+            window.myLine.update();
+        });
+    </script>
+</body>
+
+</html>

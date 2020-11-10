@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+.mainFxmlClass {
+
+    -fx-background-color: #ffffff;
+}
+
+.settings_btn:hover{
+    -fx-fill: #356fe4;
+}
+
+.button{
+    -fx-background-radius: 0px;
+    
+}
+.chooseFile_btn{
+    -fx-background-color: #0b46a3;
+    -fx-border-radius: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.chooseFile_btn:hover{
+    -fx-background-color: #4287f5;
+    
+}
+
+.loadDS_btn{
+    -fx-background-color: #07a614;
+    -fx-border-radius-width: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.loadDS_btn:hover{
+    -fx-background-color: #42ed50;
+    
+}
+.startMining_btn{
+    -fx-background-color: #0b46a3;
+    -fx-border-radius-width: 0px;
+    -fx-font-famuily: 'Roboto', sans-serif;
+    
+}
+.startMining_btn:hover{
+    -fx-background-color: #4287f5;
+    
+}
+.filepath_input{
+    -fx-border-width:  0px 0px 2px 0px;
+    -fx-border-color: #3a51b7;
+    -fx-background-color:  transparent;
+}
+.visualize_btn{
+    -fx-background-color: #673ab7;
+
+
+}
+.visualize_btn:hover{
+    -fx-background-color: #7e57c2;
+}
+
+.preprocess_btn{
+    -fx-background-color: #ff4081;
+
+}
+.preprocess_btn:hover{
+    -fx-background-color: #ff94c2;
+
+}
+
+.mining_btn{
+    -fx-background-color: #8bc34a;
+
+
+}
+.mining_btn:hover{
+    -fx-background-color: #bef67a;
+}
+
+.clustering_btn{
+    -fx-background-color: #1976d2;
+
+
+}
+.clustering_btn:hover{
+    -fx-background-color: #42a5f5;
+}
+
+
+
+
+
+

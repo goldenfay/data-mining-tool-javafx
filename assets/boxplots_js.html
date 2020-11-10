@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <script src="bootstrap-4.3.1-dist/js/jquery.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/popper.min.js"></script>
+    <script src="bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
+    <script src="plotly-latest.min.js"></script>
+
+    <style>
+        .HTitle {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #4041a3;
+            text-align: center;
+        }
+
+        .card-text b {
+            color: #f05f05;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div id="myChart" style="height: 400px; margin: auto; min-width: 310px; max-width: 600px"></div>
+        <div>
+            <div class="row" id="cardsDiv" style="margin-top: 50px;">
+
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+
+        var logBackup = console.log;
+        var logMessages = [];
+
+        console.log = function () {
+            logMessages.push.apply(logMessages, arguments);
+            logBackup.apply(console, arguments);
+        };
+
+
+
+        var jsConnector;
+        var jsonBundle = {};
+        var resultsByattribut = [];
+        var attributs = [];
+
+
+        var data = [];
+        var boxValues = {};
+        var boxDatas = [];
+        var outliers = [];
+
+
+
+
+        function constructDataSeries(attributeResult, index) {
+            fiveNSummary = attributeResult["FiveNumberSummary"];
+            outliers = [];
+            data = attributeResult["Values"];
+
+            var boxDatas = {},
+                values = {},
+                x = index,
+                y = data,
+                min = fiveNSummary["Min"],
+                max = fiveNSummary["Max"],
+                q1 = fiveNSummary["Q1"],
+                median = fiveNSummary["Median"],
+                q3 = fiveNSummary["Q3"],
+                iqr = q3 - q1,
+                lowerFence = q1 - (iqr * 1.5),
+                upperFence = q3 + (iqr * 1.5);
+
+
+            for (var i = 0; i < data.length; i++) {
+                if (data[i] < lowerFence || data[i] > upperFence) {
+                    outliers.push([x, data[i]]);
+                }
+            }
+            boxDatas.values = {};
+            boxDatas.values.x = index + "f";
+            boxDatas.values.y = data;
+            boxDatas.values.low = lowerFence;
+            boxDatas.values.q1 = q1;
+            boxDatas.values.median = median;
+            boxDatas.values.q3 = q3;
+            boxDatas.values.high = upperFence;
+            boxDatas.values.mode = attributeResult["Mode"];
+            boxDatas.values.average = attributeResult["Average"];
+            boxDatas.outliers = outliers;
+
+
+
+            return boxDatas;
+
+
+
+        }
+
+
+        function init() {
+            jsonBundle = {};
+            attributs = [];
+
+            data = [];
+        }
+
+        function getJsConnector() {
+            init();
+            return jsConnector;
+        };
+
+        function setVariables() {
+            try {
+                jsonBundle = JSON.parse(window.javaConnector.stringifyAllResults());
+
+                flag = jsonBundle["SucessFlag"];
+                if (flag == "Fail") {
+                    $('.container').append('<h2> Error In bundles source </br> </h2>');
+                } else {
+
+                    //resultsByattribut = [];
+                    for (key in jsonBundle) {
+                        if (jsonBundle.hasOwnProperty(key))
+                            if (key.startsWith("Attribute")) {
+                                resultsByattribut.push(jsonBundle[key]);
+                                attributs.push(key.replace("Attribute", "").replace("_", " "));
+                            }
+                    }
+
+                }
+
+
+            } catch (ex) {
+                $('.container').append('<h2> Error on parsing bundles <br>' + ex + '</h2>');
+            }
+
+
+        };
+
+
+
+
+
+        $(window).on('load', function () {
+            y= [3, 7, 7, 7, 3, 7, 6, 7, 7, 7, 7, 7, 3, 3, 3, 3, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 3, 7, 6, 3, 7, 7, 7, 7, 3, 3, 3, 7, 3, 3, 7, 6, 3, 3, 3, 6, 7, 6, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 3, 3, 6, 6, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 7, 7, 3, 6, 3, 3, 7, 3, 7, 3, 3, 7, 3, 7, 3, 3, 7, 7, 3, 3, 3, 3, 7, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 7, 3, 7, 7, 3, 7, 3, 3, 3, 7, 3, 3, 7, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 6, 3, 7, 3, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 3, 7, 7, 7, 3, 3, 7, 7, 3, 3, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 3, 7, 3, 7, 7, 7, 3, 3, 3, 6, 7, 3, 7, 3, 7, 7, 7, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 7, 7, 3, 7, 7, 3, 7, 3, 3, 7, 3, 3, 3, 7, 7, 3, 7, 7, 3, 7, 3, 6, 7, 7, 3, 6, 7, 7, 3, 7, 7, 7, 3, 7, 3, 3, 7, 3, 3, 3, 3, 7, 6, 3, 3, 7, 7, 3, 3, 3, 3, 3, 3, 7, 3, 3, 3, 7, 3, 3, 7, 7, 7, 3, 6, 3,19];
+            y.sort();
+            var trace = {
+                y: y,
+
+                        type: 'box',
+                        name: 'Avant ',
+                        marker: {
+                            color: 'rgb(8,81,156)',
+                            outliercolor: 'rgba(237, 26, 26,0.8)',
+                            line: {
+                                outliercolor: 'rgba(237, 26, 26,0.6)',
+                                outlierwidth: 2
+                            }
+                        },
+                        boxpoints: 'outliers'
+                    };
+
+                    var data = [trace];
+
+                    var layout = {
+                        title: 'BoxPlot thal'
+                    };
+
+                    Plotly.newPlot('myChart', data, layout, { showSendToCloud: false });
+
+
+            window.jsConnector = {
+                showBoxplot: function () {
+                    var trace = {
+                        y: [3, 7, 7, 7, 3, 7, 6, 7, 7, 7, 7, 7, 3, 3, 3, 3, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 3, 7, 6, 3, 7, 7, 7, 7, 3, 3, 3, 7, 3, 3, 7, 6, 3, 3, 3, 6, 7, 6, 3, 3, 3, 3, 3, 3, 3, 3, 7, 7, 7, 3, 3, 6, 6, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 7, 7, 3, 6, 3, 3, 7, 3, 7, 3, 3, 7, 3, 7, 3, 3, 7, 7, 3, 3, 3, 3, 7, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 7, 3, 7, 7, 3, 7, 3, 3, 3, 7, 3, 3, 7, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 6, 3, 7, 3, 7, 7, 3, 7, 7, 3, 3, 3, 3, 3, 3, 3, 7, 3, 7, 7, 7, 3, 3, 7, 7, 3, 3, 3, 3, 3, 3, 7, 3, 3, 3, 3, 7, 3, 7, 3, 7, 7, 7, 3, 3, 3, 6, 7, 3, 7, 3, 7, 7, 7, 3, 3, 3, 3, 3, 3, 7, 7, 7, 7, 7, 7, 3, 7, 7, 3, 7, 3, 3, 7, 3, 3, 3, 7, 7, 3, 7, 7, 3, 7, 3, 6, 7, 7, 3, 6, 7, 7, 3, 7, 7, 7, 3, 7, 3, 3, 7, 3, 3, 3, 3, 7, 6, 3, 3, 7, 7, 3, 3, 3, 3, 3, 3, 7, 3, 3, 3, 7, 3, 3, 7, 7, 7, 3, 6, 3],
+                        type: 'box',
+                        name: 'Avant ',
+                        marker: {
+                            color: 'rgb(8,81,156)',
+                            outliercolor: 'rgba(219, 64, 82, 0.6)',
+                            line: {
+                                outliercolor: 'rgba(219, 64, 82, 1.0)',
+                                outlierwidth: 2
+                            }
+                        },
+                        boxpoints: 'Outliers'
+                    };
+
+                    var data = [trace];
+
+                    var layout = {
+                        title: 'BoxPlot thal'
+                    };
+
+                    Plotly.newPlot('myChart', data, layout, { showSendToCloud: true });
+
+
+                }
+
+            }
+
+
+
+
+
+        });
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>

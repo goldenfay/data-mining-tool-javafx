@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/algorithms/Apriori.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/algorithms/KMedoids.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/AprioriGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/ClusteringSettingsGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/algorithms/Eclat.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/AprioriSettingsGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/EClatSettingsGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/EclatGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/bases/AssociationRule.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/algorithms/CLARANS.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/bases/FrequentSet.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/mining/algorithms/DBScan.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/ClusteringGUIController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/PrevisualizeWindowController.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/preprocessing/bases/generalDataSet.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/model/preprocessing/bases/DataSet.java</file>
+            <file>file:/C:/Users/PC/Documents/NetBeansProjects/DataMiningProject%20%20V2/src/GUI/Controllers/PreProcessingWindowController.java</file>
+        </group>
+    </open-files>
+</project-private>
